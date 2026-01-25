@@ -47,12 +47,7 @@ pub async fn tenant_middleware(
         // For certain routes (like auth), we might not require tenant header
         // Check if this is an auth route
         let path = req.uri().path();
-        if path.starts_with("/api/v1/auth/")
-            && (path.ends_with("/login")
-                || path.ends_with("/register")
-                || path.ends_with("/person-register")
-                || path.ends_with("/refresh"))
-        {
+        if path.starts_with("/api/v1/auth/") {
             // Allow auth routes without tenant header
             return Ok(next.run(req).await);
         }
