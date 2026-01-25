@@ -242,11 +242,12 @@ def build(frontend_only, backend_only, release):
 @cli.command()
 @click.option("--frontend-only", is_flag=True, help="Test only the frontend")
 @click.option("--backend-only", is_flag=True, help="Test only the backend")
-def test(frontend_only, backend_only):
+@click.option("--migrations-only", is_flag=True, help="Test only the database migrations")
+def test(frontend_only, backend_only, migrations_only):
     """Run tests for client and/or server components."""
     print_header("Running EMS Tests")
 
-    if not backend_only:
+    if not backend_only and not migrations_only:
         print_header("Running Frontend Tests")
         if CLIENT_DIR.exists():
             # Check if test script exists in package.json
@@ -268,13 +269,61 @@ def test(frontend_only, backend_only):
         else:
             print_warning("Frontend directory not found")
 
-    if not frontend_only:
+    if not frontend_only and not migrations_only:
         print_header("Running Backend Tests")
         if SERVER_DIR.exists():
             run_command(["cargo", "test"], cwd=SERVER_DIR)
             print_success("Backend tests completed")
         else:
             print_warning("Backend directory not found")
+
+    if not frontend_only and not backend_only:
+        print_header("Running Migration Tests")
+        # Load config.env if not already loaded
+        if CONFIG_FILE.exists():
+            try:
+                with open(CONFIG_FILE, "r") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line and not line.startswith("#") and "=" in line:
+                            key, value = line.split("=", 1)
+                            if not os.getenv(key.strip()):
+                                os.environ[key.strip()] = value.strip()
+            except Exception as e:
+                print_error(f"Failed to load config.env: {e}")
+                return
+
+        database_url = os.getenv("DATABASE_URL")
+        if not database_url:
+            print_error("DATABASE_URL not set. Please configure config.env")
+            return
+
+        migration_test_file = MIGRATIONS_DIR / "migration_tests.sql"
+        if migration_test_file.exists():
+            print_header(f"Running Migration Tests: {migration_test_file.name}")
+            try:
+                result = subprocess.run(
+                    ["psql", database_url, "-f", str(migration_test_file)],
+                    capture_output=True,
+                    text=True
+                )
+
+                if result.returncode == 0:
+                    print_success("Migration tests completed successfully")
+                    # Show some output if there are notices
+                    if result.stderr:
+                        for line in result.stderr.split('\n'):
+                            if 'PASS:' in line or 'NOTICE:' in line:
+                                click.echo(f"  {line}")
+                else:
+                    print_error(f"Migration tests failed:")
+                    click.echo(result.stderr)
+            except FileNotFoundError:
+                print_error("psql not found. Please install PostgreSQL client tools.")
+            except Exception as e:
+                print_error(f"Error running migration tests: {e}")
+        else:
+            print_warning("Migration test file not found")
 
     print_success("All tests completed!")
 

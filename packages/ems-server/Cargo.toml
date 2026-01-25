@@ -10,10 +10,10 @@ tower = "0.4"
 tower-http = { version = "0.5", features = ["cors", "trace", "fs"] }
 
 # Async runtime
-tokio = { version = "1.46", features = ["full"] }
+tokio = { version = "1.49", features = ["full"] }
 
 # Database & ORM
-diesel = { version = "2.2.12", features = ["postgres", "uuid", "chrono", "r2d2", "serde_json"] }
+diesel = { version = "2.2.0", features = ["postgres", "uuid", "chrono", "r2d2", "serde_json"] }
 diesel-async = { version = "0.5.2", features = ["postgres", "bb8"] }
 bb8 = "0.8"
 
@@ -25,7 +25,7 @@ serde_json = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
 
 # UUID support
-uuid = { version = "1.17", features = ["v4", "serde"] }
+uuid = { version = "1.19", features = ["v4", "serde"] }
 
 # Environment variables
 dotenv = "0.15"
@@ -56,10 +56,11 @@ oauth2 = "4.4"
 url = "2.5"
 
 # Regular expressions
-regex = "1.11"
+regex = "1.12"
 
 # Lazy static for regex compilation
 lazy_static = "1.5"
+futures-util = "0.3.31"
 
 [dev-dependencies]
 # Testing dependencies
