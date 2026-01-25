@@ -28,14 +28,9 @@ export function Sidebar({
       )}
     >
       {/* Logo / Brand Area */}
-      <div className="p-6 border-b border-border/50">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-soft">
-            <span className="text-white font-semibold text-sm">E</span>
-          </div>
-          <span className="font-semibold text-foreground/90 tracking-tight">
-            EMS
-          </span>
+      <div className="px-6 py-4 flex justify-center">
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-soft">
+          <span className="text-white font-semibold text-sm">E</span>
         </div>
       </div>
 
@@ -77,7 +72,7 @@ export function Sidebar({
       {/* Footer */}
       <div className="p-4 mt-auto border-t border-border/50">
         <p className="text-xs text-muted-foreground/70 text-center tracking-wide">
-          © 2025 Shishir Dey
+          © 2026 Shishir Dey
         </p>
       </div>
     </div>

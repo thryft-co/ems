@@ -181,11 +181,10 @@ const Dashboard: React.FC = () => {
                   <button
                     key={tab.id}
                     onClick={() => handleTabChange(tab.id)}
-                    className={`px-4 py-2 text-sm font-medium transition-colors ${
-                      activeTab === tab.id
-                        ? "border-b-2 border-primary text-primary"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab.id
+                      ? "border-b-2 border-primary text-primary"
+                      : "text-muted-foreground hover:text-foreground"
+                      }`}
                   >
                     {tab.label}
                   </button>
@@ -214,11 +213,10 @@ const Dashboard: React.FC = () => {
                   <button
                     key={tab.id}
                     onClick={() => handleTabChange(tab.id)}
-                    className={`px-4 py-2 text-sm font-medium transition-colors ${
-                      activeTab === tab.id
-                        ? "border-b-2 border-primary text-primary"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab.id
+                      ? "border-b-2 border-primary text-primary"
+                      : "text-muted-foreground hover:text-foreground"
+                      }`}
                   >
                     {tab.label}
                   </button>
@@ -252,11 +250,10 @@ const Dashboard: React.FC = () => {
                   <button
                     key={tab.id}
                     onClick={() => handleTabChange(tab.id)}
-                    className={`px-4 py-2 text-sm font-medium transition-colors ${
-                      activeTab === tab.id
-                        ? "border-b-2 border-primary text-primary"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab.id
+                      ? "border-b-2 border-primary text-primary"
+                      : "text-muted-foreground hover:text-foreground"
+                      }`}
                   >
                     {tab.label}
                   </button>
@@ -291,11 +288,10 @@ const Dashboard: React.FC = () => {
                 <button
                   key={tab.id}
                   onClick={() => handleTabChange(tab.id)}
-                  className={`px-4 py-2 text-sm font-medium transition-colors ${
-                    activeTab === tab.id
-                      ? "border-b-2 border-primary text-primary"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
+                  className={`px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab.id
+                    ? "border-b-2 border-primary text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -328,38 +324,40 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-full bg-background">
-      <div className="w-64 h-full flex-shrink-0">
-        <Sidebar
-          items={sidebarItems}
-          activeItem={activeSection}
-          onItemClick={handleSectionChange}
-        />
-      </div>
-      <div className="flex flex-col flex-1 min-w-0">
-        <header className="h-16 border-b border-border/50 flex items-center justify-between px-6 sticky top-0 z-10 bg-background/80 backdrop-blur-xl shadow-sm">
-          <h1 className="text-lg font-semibold tracking-tight text-foreground/90">
-            Enterprise Management Suite
-          </h1>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary/50">
-              <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-              <span className="text-sm font-medium text-foreground/80">
-                {currentTenant?.name}
-              </span>
-              <span className="text-sm text-muted-foreground">
-                · {user?.first_name} {user?.last_name}
-              </span>
-            </div>
-            <Button variant="outline" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4" />
-              Sign Out
-            </Button>
+    <div className="flex flex-col h-screen w-full bg-background">
+      <header className="h-16 border-b border-border/50 flex items-center justify-between px-6 sticky top-0 z-10 bg-background/80 backdrop-blur-xl shadow-sm">
+        <span className="text-lg font-semibold tracking-tight text-foreground">
+          Enterprise Management Suite
+        </span>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary/50">
+            <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+            <span className="text-sm font-medium text-foreground/80">
+              🏢 {currentTenant?.name}
+            </span>
+            <span className="text-sm text-muted-foreground">
+              · 👤 {user?.first_name} {user?.last_name}
+            </span>
           </div>
-        </header>
-        <main className="flex-1 p-6 overflow-auto bg-muted/30">
-          <div className="animate-fade-in">{renderContent()}</div>
-        </main>
+          <Button variant="outline" size="sm" onClick={handleLogout}>
+            <LogOut className="w-4 h-4" />
+            Sign Out
+          </Button>
+        </div>
+      </header>
+      <div className="flex flex-1 min-h-0">
+        <div className="w-64 h-full flex-shrink-0">
+          <Sidebar
+            items={sidebarItems}
+            activeItem={activeSection}
+            onItemClick={handleSectionChange}
+          />
+        </div>
+        <div className="flex flex-col flex-1 min-w-0">
+          <main className="flex-1 p-6 overflow-auto bg-muted/30">
+            <div className="animate-fade-in">{renderContent()}</div>
+          </main>
+        </div>
       </div>
     </div>
   );
