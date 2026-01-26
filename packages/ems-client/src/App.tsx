@@ -17,6 +17,7 @@ import {
   User,
   Settings,
   LogOut,
+  Building2,
 } from "lucide-react";
 
 // Import job components
@@ -330,18 +331,24 @@ const Dashboard: React.FC = () => {
           Enterprise Management Suite
         </span>
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary/50">
-            <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-            <span className="text-sm font-medium text-foreground/80">
-              🏢 {currentTenant?.name}
+          <Button variant="outline" size="sm" className="relative flex items-center gap-2 px-2 py-1 rounded-lg bg-secondary/50 w-auto min-w-[140px]">
+            <div className="absolute left-2 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+            <div className="flex items-center gap-2 pl-3">
+              <Building2 className="w-3.5 h-3.5 text-primary" />
+              <span className="text-sm font-medium text-foreground/80 truncate max-w-[100px]">
+                {currentTenant?.name}
+              </span>
+            </div>
+          </Button>
+          <Button variant="outline" size="sm" className="flex items-center gap-2 px-2 py-1 rounded-lg bg-secondary/50 w-auto min-w-[140px]">
+            <User className="w-3.5 h-3.5 text-primary" />
+            <span className="text-sm text-muted-foreground truncate max-w-[100px]">
+              {user?.first_name} {user?.last_name}
             </span>
-            <span className="text-sm text-muted-foreground">
-              · 👤 {user?.first_name} {user?.last_name}
-            </span>
-          </div>
-          <Button variant="outline" size="sm" onClick={handleLogout}>
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleLogout} className="border-destructive text-destructive w-32">
             <LogOut className="w-4 h-4" />
-            Sign Out
+            <span className="text-sm">Sign Out</span>
           </Button>
         </div>
       </header>

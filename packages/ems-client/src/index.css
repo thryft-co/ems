@@ -17,12 +17,12 @@
   --primary-foreground: 0 0% 100%;
 
   /* Secondary: Soft gray */
-  --secondary: 220 14% 96%;
+  --secondary: 220 14% 94%;
   --secondary-foreground: 220 9% 26%;
 
   /* Muted: Light gray tones */
-  --muted: 220 14% 96%;
-  --muted-foreground: 220 9% 46%;
+  --muted: 220 14% 94%;
+  --muted-foreground: 220 9% 40%;
 
   /* Accent: Subtle blue tint */
   --accent: 214 100% 97%;
@@ -40,26 +40,34 @@
   --warning: 38 92% 50%;
   --warning-foreground: 0 0% 100%;
 
+
+
   /* Borders and inputs */
-  --border: 220 13% 91%;
-  --input: 220 13% 91%;
+  --border: 220 13% 85%;
+  --input: 220 13% 85%;
   --ring: 211 100% 50%;
 
   /* Radius - Apple uses softer corners */
   --radius: 0.75rem;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.03);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07),
-    0 2px 4px -2px rgb(0 0 0 / 0.05);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08),
-    0 4px 6px -4px rgb(0 0 0 / 0.05);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08),
-    0 8px 10px -6px rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.05);
 
-  /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.18);
+  /* Advanced Glassmorphism - iOS 26/macOS 26 */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.9);
+  --glass-shadow: rgba(0, 0, 0, 0.05);
+
+  /* Dynamic Material Layers */
+  --material-ultra-thin: rgba(255, 255, 255, 0.5);
+  --material-thin: rgba(255, 255, 255, 0.65);
+  --material-regular: rgba(255, 255, 255, 0.75);
+  --material-thick: rgba(255, 255, 255, 0.85);
+  --material-chrome: rgba(255, 255, 255, 0.95);
 }
 
 .dark {
@@ -81,7 +89,7 @@
 
   /* Muted */
   --muted: 220 13% 18%;
-  --muted-foreground: 220 9% 58%;
+  --muted-foreground: 220 9% 65%;
 
   /* Accent */
   --accent: 220 13% 18%;
@@ -99,21 +107,36 @@
   --warning: 38 92% 45%;
   --warning-foreground: 0 0% 100%;
 
+
+
   /* Borders */
-  --border: 220 13% 20%;
-  --input: 220 13% 20%;
+  --border: 220 13% 25%;
+  --input: 220 13% 25%;
   --ring: 211 100% 60%;
 
-  /* Dark glassmorphism */
-  --glass-bg: rgba(28, 28, 30, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  /* Dark glassmorphism - Enhanced materials */
+  --glass-bg: rgba(28, 28, 30, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.15);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
+
+  /* Dynamic Material Layers - Dark */
+  --material-ultra-thin: rgba(28, 28, 30, 0.4);
+  --material-thin: rgba(28, 28, 30, 0.6);
+  --material-regular: rgba(28, 28, 30, 0.75);
+  --material-thick: rgba(28, 28, 30, 0.85);
+  --material-chrome: rgba(28, 28, 30, 0.95);
 }
 
-/* Keyframes for micro-animations */
+/* ============================================================================
+   KEYFRAME ANIMATIONS
+   ============================================================================ */
+
 @keyframes accordion-down {
   from {
     height: 0;
   }
+
   to {
     height: var(--radix-accordion-content-height);
   }
@@ -123,6 +146,7 @@
   from {
     height: var(--radix-accordion-content-height);
   }
+
   to {
     height: 0;
   }
@@ -132,6 +156,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -142,6 +167,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -153,6 +179,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -164,17 +191,44 @@
     opacity: 0;
     transform: translateX(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
   }
 }
 
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes pulse-subtle {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.8;
   }
@@ -184,12 +238,64 @@
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
 }
 
-/* Default border color */
+@keyframes glow-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(0, 122, 255, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 30px rgba(0, 122, 255, 0.5);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes blur-in {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
+
 *,
 ::after,
 ::before,
@@ -198,81 +304,177 @@
   border-color: var(--color-border, currentcolor);
 }
 
-/* Basic elements */
 * {
   border-color: hsl(var(--border));
 }
 
 body {
-  font-family:
-    "Inter",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-feature-settings:
-    "rlig" 1,
-    "calt" 1;
+  font-feature-settings: "rlig" 1, "calt" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.5;
   letter-spacing: -0.011em;
 }
 
-/* Glassmorphism utility classes */
+/* ============================================================================
+   GLASSMORPHISM UTILITIES - iOS 26 Enhanced
+   ============================================================================ */
+
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--glass-border);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 0 var(--glass-highlight);
 }
 
 .glass-strong {
   background: var(--glass-bg);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 12px 48px 0 rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 0 var(--glass-highlight);
+}
+
+.glass-ultra-thin {
+  background: var(--material-ultra-thin);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
   border: 1px solid var(--glass-border);
 }
 
-/* Animation utility classes */
+.glass-thin {
+  background: var(--material-thin);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-regular {
+  background: var(--material-regular);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-thick {
+  background: var(--material-thick);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-chrome {
+  background: var(--material-chrome);
+  backdrop-filter: blur(50px) saturate(200%) brightness(105%);
+  -webkit-backdrop-filter: blur(50px) saturate(200%) brightness(105%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 16px 64px 0 rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 0 var(--glass-highlight);
+}
+
+.glass-vibrant {
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px) saturate(250%) contrast(110%);
+  -webkit-backdrop-filter: blur(30px) saturate(250%) contrast(110%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 10px 40px 0 rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 0 var(--glass-highlight);
+}
+
+.frosted-light {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(25px) saturate(180%) brightness(110%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%) brightness(110%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.frosted-dark {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(25px) saturate(180%) brightness(90%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%) brightness(90%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================================================
+   ANIMATION UTILITIES
+   ============================================================================ */
+
 .animate-fade-in {
-  animation: fade-in 0.3s ease-out;
+  animation: fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-fade-up {
-  animation: fade-up 0.4s ease-out;
+  animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-scale-in {
-  animation: scale-in 0.2s ease-out;
+  animation: scale-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .animate-slide-in-right {
-  animation: slide-in-right 0.3s ease-out;
+  animation: slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Smooth transitions */
+.animate-slide-in-left {
+  animation: slide-in-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-slide-in-bottom {
+  animation: slide-in-bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-blur-in {
+  animation: blur-in 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* ============================================================================
+   TRANSITION UTILITIES
+   ============================================================================ */
+
 .transition-smooth {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .transition-hover {
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-/* Interactive hover effects */
+.state-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.state-transition-fast {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.state-transition-slow {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================================
+   HOVER EFFECTS
+   ============================================================================ */
+
 .hover-lift {
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .hover-lift:hover {
@@ -280,7 +482,46 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
-/* Focus styles */
+.hover-glass {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-glass:hover {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%) brightness(105%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(105%);
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 24px -8px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 0 var(--glass-highlight);
+}
+
+.hover-scale {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-scale-sm:hover {
+  transform: scale(1.02);
+}
+
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow:
+    0 0 20px rgba(0, 122, 255, 0.3),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================================
+   FOCUS STYLES
+   ============================================================================ */
+
 .focus-ring {
   outline: none;
 }
@@ -290,30 +531,193 @@ body {
   outline-offset: 2px;
 }
 
-/* Card enhancements */
+/* ============================================================================
+   DEPTH & LAYERING
+   ============================================================================ */
+
+.layer-base {
+  position: relative;
+  z-index: 1;
+}
+
+.layer-elevated {
+  position: relative;
+  z-index: 10;
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.05),
+    0 10px 20px -5px rgba(0, 0, 0, 0.08);
+}
+
+.layer-floating {
+  position: relative;
+  z-index: 20;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.08),
+    0 20px 40px -10px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.layer-modal {
+  position: relative;
+  z-index: 50;
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================================================
+   SHADOW UTILITIES
+   ============================================================================ */
+
+.shadow-soft {
+  box-shadow:
+    0 2px 8px 0 rgba(0, 0, 0, 0.04),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.shadow-medium {
+  box-shadow:
+    0 4px 16px 0 rgba(0, 0, 0, 0.06),
+    0 2px 4px 0 rgba(0, 0, 0, 0.08);
+}
+
+.shadow-hard {
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.1),
+    0 4px 8px 0 rgba(0, 0, 0, 0.12);
+}
+
+.shadow-intense {
+  box-shadow:
+    0 20px 60px 0 rgba(0, 0, 0, 0.15),
+    0 8px 16px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================================================
+   CARD ENHANCEMENTS
+   ============================================================================ */
+
 .card-elevated {
   box-shadow: var(--shadow-md);
-  transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .card-elevated:hover {
   box-shadow: var(--shadow-lg);
 }
 
-/* Button enhancements */
+/* ============================================================================
+   BUTTON ENHANCEMENTS
+   ============================================================================ */
+
 .btn-press {
-  transition:
-    transform 0.1s ease,
-    box-shadow 0.1s ease;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .btn-press:active {
   transform: scale(0.98);
 }
 
-/* Scrollbar styling */
+/* ============================================================================
+   RIPPLE EFFECT
+   ============================================================================ */
+
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.ripple-container:active::after {
+  animation: ripple 0.6s ease-out;
+}
+
+/* ============================================================================
+   GRADIENT OVERLAYS
+   ============================================================================ */
+
+.gradient-overlay-light {
+  position: relative;
+}
+
+.gradient-overlay-light::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.gradient-overlay-vibrant {
+  position: relative;
+}
+
+.gradient-overlay-vibrant::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.15) 0%, rgba(88, 86, 214, 0.15) 100%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ============================================================================
+   INTERACTIVE BORDERS
+   ============================================================================ */
+
+.border-interactive {
+  border: 1px solid hsl(var(--border));
+  transition: border-color 0.2s ease;
+}
+
+.border-interactive:hover {
+  border-color: hsl(var(--primary) / 0.5);
+}
+
+.border-interactive:focus-within {
+  border-color: hsl(var(--primary));
+}
+
+/* ============================================================================
+   TEXT EFFECTS
+   ============================================================================ */
+
+.text-shimmer {
+  background: linear-gradient(90deg,
+      hsl(var(--foreground)) 0%,
+      hsl(var(--primary)) 50%,
+      hsl(var(--foreground)) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent-foreground)) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================================================
+   SCROLLBAR STYLING
+   ============================================================================ */
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -332,8 +736,49 @@ body {
   background: hsl(var(--muted-foreground) / 0.5);
 }
 
-/* Selection styling */
+/* ============================================================================
+   SMOOTH SCROLL
+   ============================================================================ */
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================================================
+   SELECTION STYLING
+   ============================================================================ */
+
 ::selection {
   background: hsl(var(--primary) / 0.2);
   color: hsl(var(--foreground));
+}
+
+/* ============================================================================
+   ACCESSIBILITY
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+
+  .glass,
+  .glass-strong,
+  .glass-ultra-thin,
+  .glass-thin,
+  .glass-regular,
+  .glass-thick,
+  .glass-chrome,
+  .glass-vibrant {
+    border-width: 2px;
+  }
 }
