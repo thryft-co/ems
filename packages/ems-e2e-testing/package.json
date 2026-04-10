@@ -1,0 +1,29 @@
+{
+  "name": "ems-e2e-testing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "E2E testing suite for the Enterprise Management Suite",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:smoke": "npx playwright test --grep @smoke",
+    "test:regression": "npx playwright test --grep @regression",
+    "test:critical": "npx playwright test --grep @critical",
+    "test:visual": "npx playwright test --grep @visual",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug",
+    "test:ui": "npx playwright test --ui",
+    "test:chromium": "npx playwright test --project=chromium",
+    "test:firefox": "npx playwright test --project=firefox",
+    "test:webkit": "npx playwright test --project=webkit",
+    "report": "npx playwright show-report",
+    "update-snapshots": "npx playwright test --update-snapshots",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.0",
+    "axios": "^1.13.0",
+    "dotenv": "^16.5.0",
+    "typescript": "^5.9.0"
+  }
+}

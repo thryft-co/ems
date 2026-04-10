@@ -182,10 +182,11 @@ const Dashboard: React.FC = () => {
                   <button
                     key={tab.id}
                     onClick={() => handleTabChange(tab.id)}
-                    className={`px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab.id
-                      ? "border-b-2 border-primary text-primary"
-                      : "text-muted-foreground hover:text-foreground"
-                      }`}
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${
+                      activeTab === tab.id
+                        ? "border-b-2 border-primary text-primary"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
                   >
                     {tab.label}
                   </button>
@@ -214,10 +215,11 @@ const Dashboard: React.FC = () => {
                   <button
                     key={tab.id}
                     onClick={() => handleTabChange(tab.id)}
-                    className={`px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab.id
-                      ? "border-b-2 border-primary text-primary"
-                      : "text-muted-foreground hover:text-foreground"
-                      }`}
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${
+                      activeTab === tab.id
+                        ? "border-b-2 border-primary text-primary"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
                   >
                     {tab.label}
                   </button>
@@ -251,10 +253,11 @@ const Dashboard: React.FC = () => {
                   <button
                     key={tab.id}
                     onClick={() => handleTabChange(tab.id)}
-                    className={`px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab.id
-                      ? "border-b-2 border-primary text-primary"
-                      : "text-muted-foreground hover:text-foreground"
-                      }`}
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${
+                      activeTab === tab.id
+                        ? "border-b-2 border-primary text-primary"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
                   >
                     {tab.label}
                   </button>
@@ -289,10 +292,11 @@ const Dashboard: React.FC = () => {
                 <button
                   key={tab.id}
                   onClick={() => handleTabChange(tab.id)}
-                  className={`px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab.id
-                    ? "border-b-2 border-primary text-primary"
-                    : "text-muted-foreground hover:text-foreground"
-                    }`}
+                  className={`px-4 py-2 text-sm font-medium transition-colors ${
+                    activeTab === tab.id
+                      ? "border-b-2 border-primary text-primary"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
                 >
                   {tab.label}
                 </button>
@@ -331,7 +335,11 @@ const Dashboard: React.FC = () => {
           Enterprise Management Suite
         </span>
         <div className="flex items-center gap-4">
-          <Button variant="outline" size="sm" className="relative flex items-center gap-2 px-2 py-1 rounded-lg bg-secondary/50 w-auto min-w-[140px]">
+          <Button
+            variant="outline"
+            size="sm"
+            className="relative flex items-center gap-2 px-2 py-1 rounded-lg bg-secondary/50 w-auto min-w-[140px]"
+          >
             <div className="absolute left-2 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
             <div className="flex items-center gap-2 pl-3">
               <Building2 className="w-3.5 h-3.5 text-primary" />
@@ -340,13 +348,22 @@ const Dashboard: React.FC = () => {
               </span>
             </div>
           </Button>
-          <Button variant="outline" size="sm" className="flex items-center gap-2 px-2 py-1 rounded-lg bg-secondary/50 w-auto min-w-[140px]">
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-2 px-2 py-1 rounded-lg bg-secondary/50 w-auto min-w-[140px]"
+          >
             <User className="w-3.5 h-3.5 text-primary" />
             <span className="text-sm text-muted-foreground truncate max-w-[100px]">
               {user?.first_name} {user?.last_name}
             </span>
           </Button>
-          <Button variant="outline" size="sm" onClick={handleLogout} className="border-destructive text-destructive w-32">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleLogout}
+            className="border-destructive text-destructive w-32"
+          >
             <LogOut className="w-4 h-4" />
             <span className="text-sm">Sign Out</span>
           </Button>

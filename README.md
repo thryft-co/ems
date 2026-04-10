@@ -74,4 +74,32 @@ python run.py dev
 | `python run.py lint` | Lint code | `--frontend-only`, `--backend-only`, `--fix` |
 | `python run.py format` | Format code | `--frontend-only`, `--backend-only` |
 | `python run.py clean` | Clean build artifacts | `--frontend-only`, `--backend-only`, `--deep` |
+| `python run.py e2e` | Run E2E tests (Playwright) | `--smoke`, `--regression`, `--critical`, `--headed`, `--ui`, `--project`, `--no-server` |
 | `python run.py status` | Show component status | |
+
+### E2E Testing
+
+The E2E test suite lives in `packages/ems-e2e-testing/` and uses [Playwright](https://playwright.dev/).
+
+```bash
+# Run all E2E tests
+python run.py e2e
+
+# Run only smoke tests (auth flows)
+python run.py e2e --smoke
+
+# Run regression tests (CRUD operations)
+python run.py e2e --regression
+
+# Run critical tests (tenant isolation)
+python run.py e2e --critical
+
+# Run in headed mode (visible browser)
+python run.py e2e --headed
+
+# Open Playwright UI
+python run.py e2e --ui
+
+# Run in a specific browser
+python run.py e2e --project chromium
+```

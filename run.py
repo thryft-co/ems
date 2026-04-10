@@ -19,6 +19,7 @@ PROJECT_ROOT = Path(__file__).parent
 CLIENT_DIR = PROJECT_ROOT / "packages" / "ems-client"
 SERVER_DIR = PROJECT_ROOT / "packages" / "ems-server"
 MIGRATIONS_DIR = PROJECT_ROOT / "packages" / "ems-db"
+E2E_DIR = PROJECT_ROOT / "packages" / "ems-e2e-testing"
 CONFIG_FILE = PROJECT_ROOT / "config.env"
 
 # Required environment variables for development
@@ -700,6 +701,158 @@ def status():
         print_success("✓ Configuration file found")
     else:
         print_warning("⚠ Configuration file not found")
+
+
+@cli.command()
+@click.option("--smoke", is_flag=True, help="Run only smoke tests")
+@click.option("--regression", is_flag=True, help="Run only regression tests")
+@click.option("--critical", is_flag=True, help="Run only critical tests (tenant isolation)")
+@click.option("--headed", is_flag=True, help="Run tests in headed browser mode")
+@click.option("--ui", is_flag=True, help="Open Playwright UI mode")
+@click.option("--project", type=click.Choice(["chromium", "firefox", "webkit"]), help="Run tests in a specific browser")
+@click.option("--no-server", is_flag=True, help="Skip starting backend/frontend (if already running)")
+def e2e(smoke, regression, critical, headed, ui, project, no_server):
+    """Run end-to-end tests using Playwright."""
+    import time
+    import signal
+    import urllib.request
+    import urllib.error
+
+    print_header("Running E2E Tests")
+
+    if not E2E_DIR.exists():
+        print_error(f"E2E testing directory not found: {E2E_DIR}")
+        sys.exit(1)
+
+    # Install E2E dependencies if needed
+    if not (E2E_DIR / "node_modules").exists():
+        print_warning("E2E dependencies not installed. Installing...")
+        run_command(["npm", "install"], cwd=E2E_DIR)
+
+    # Install frontend dependencies if needed
+    if not no_server and not (CLIENT_DIR / "node_modules").exists():
+        print_warning("Frontend dependencies not installed. Installing...")
+        run_command(["npm", "install"], cwd=CLIENT_DIR)
+
+    processes = []
+
+    def cleanup_servers():
+        """Terminate all background server processes."""
+        for name, proc in processes:
+            if proc.poll() is None:  # still running
+                print_warning(f"Stopping {name} server (PID {proc.pid})...")
+                proc.terminate()
+                try:
+                    proc.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    proc.kill()
+                print_success(f"{name} server stopped")
+
+    def wait_for_url(url, name, max_attempts=30, delay=2):
+        """Wait for a URL to become reachable."""
+        for attempt in range(1, max_attempts + 1):
+            try:
+                req = urllib.request.urlopen(url, timeout=5)
+                req.close()
+                print_success(f"{name} is ready at {url} (attempt {attempt})")
+                return True
+            except (urllib.error.URLError, OSError):
+                if attempt % 5 == 0 or attempt == 1:
+                    click.echo(f"  ⏳ Waiting for {name}... (attempt {attempt}/{max_attempts})")
+                time.sleep(delay)
+        return False
+
+    try:
+        if not no_server:
+            # ---- Start Backend ----
+            print_header("Starting Backend Server")
+            if not SERVER_DIR.exists():
+                print_error(f"Server directory not found: {SERVER_DIR}")
+                sys.exit(1)
+
+            backend_env = os.environ.copy()
+            backend_proc = subprocess.Popen(
+                ["cargo", "run", "--bin", "ems-server"],
+                cwd=SERVER_DIR,
+                env=backend_env,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            processes.append(("Backend", backend_proc))
+            print_success(f"Backend server started (PID {backend_proc.pid})")
+
+            # Wait for backend to be healthy
+            backend_url = "http://localhost:5002/health"
+            if not wait_for_url(backend_url, "Backend"):
+                print_error("Backend did not become healthy. Check cargo build and config.env")
+                cleanup_servers()
+                sys.exit(1)
+
+            # ---- Start Frontend ----
+            print_header("Starting Frontend Dev Server")
+            if not CLIENT_DIR.exists():
+                print_error(f"Client directory not found: {CLIENT_DIR}")
+                cleanup_servers()
+                sys.exit(1)
+
+            frontend_proc = subprocess.Popen(
+                ["npm", "start"],
+                cwd=CLIENT_DIR,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            processes.append(("Frontend", frontend_proc))
+            print_success(f"Frontend dev server started (PID {frontend_proc.pid})")
+
+            # Wait for frontend to be reachable
+            frontend_url = "http://localhost:3001"
+            if not wait_for_url(frontend_url, "Frontend", max_attempts=20):
+                print_error("Frontend did not start. Check npm install in ems-client")
+                cleanup_servers()
+                sys.exit(1)
+
+            print_success("All servers are ready!")
+
+        # ---- Run E2E Tests ----
+        print_header("Executing Playwright Tests")
+        cmd = ["npx", "playwright", "test"]
+
+        if smoke:
+            cmd.extend(["--grep", "@smoke"])
+        elif regression:
+            cmd.extend(["--grep", "@regression"])
+        elif critical:
+            cmd.extend(["--grep", "@critical"])
+
+        if headed:
+            cmd.append("--headed")
+
+        if ui:
+            cmd.append("--ui")
+
+        if project:
+            cmd.extend(["--project", project])
+
+        result = run_command(cmd, cwd=E2E_DIR, check=False)
+
+        if result.returncode == 0:
+            print_success("E2E tests passed!")
+        else:
+            print_error("E2E tests failed")
+
+    except KeyboardInterrupt:
+        print_warning("\nInterrupted by user")
+
+    finally:
+        # Always clean up servers
+        cleanup_servers()
+
+    if not no_server or 'result' in dir():
+        try:
+            if result.returncode != 0:
+                sys.exit(result.returncode)
+        except NameError:
+            sys.exit(1)
 
 
 if __name__ == "__main__":
