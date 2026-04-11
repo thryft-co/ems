@@ -27,10 +27,8 @@ A modern, multi-tenant Enterprise Management Suite for hardware manufacturing
 │   ├── ems-server/      # Rust backend (Axum + Diesel)
 │   ├── ems-db/          # Database migrations (PostgreSQL)
 │   ├── ems-docker/      # Docker configuration
-│   ├── ems-docs/        # API documentation
 │   ├── ems-e2e-testing/ # End-to-end tests
-│   ├── ems-nginx/       # Nginx configuration
-│   └── ems-website/     # Static website
+│   └── ems-nginx/       # Nginx configuration
 ├── .github/             # GitHub Actions CI/CD
 ├── config.env.example   # Environment configuration template
 ├── requirements.txt     # Python dependencies
