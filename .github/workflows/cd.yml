@@ -38,6 +38,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
+        file: infra/docker/Dockerfile
         push: true
         tags: |
           ${{ secrets.DOCKER_USERNAME }}/ems:latest
@@ -63,9 +64,9 @@ jobs:
     
     - name: Deploy configuration files
       run: |
-        rsync -avz packages/ems-docker/docker-compose.yml root@${{ secrets.DO_SERVER_IP }}:/var/www/ems/
-        rsync -avz packages/ems-nginx/ root@${{ secrets.DO_SERVER_IP }}:/var/www/ems/nginx/
-        rsync -avz config.env.example root@${{ secrets.DO_SERVER_IP }}:/var/www/ems/
+        rsync -avz infra/docker/docker-compose.yml root@${{ secrets.DO_SERVER_IP }}:/var/www/ems/
+        rsync -avz infra/nginx/ root@${{ secrets.DO_SERVER_IP }}:/var/www/ems/nginx/
+        rsync -avz config/.env.example root@${{ secrets.DO_SERVER_IP }}:/var/www/ems/.env.example
     
     - name: Deploy to server
       env:
@@ -96,8 +97,8 @@ jobs:
         fi
         
         # Create production environment file from template with actual values
-        echo "Creating production environment file from config.env.example..."
-        cp config.env.example .env
+        echo "Creating production environment file from .env.example..."
+        cp .env.example .env
         
         # Replace placeholder values with actual secrets
         sed -i "s|postgresql://postgres:your-password@db.your-project.supabase.co:5432/postgres?sslmode=require|$DATABASE_URL|g" .env
@@ -120,7 +121,7 @@ jobs:
         sed -i "s|# RUST_LOG=warn|RUST_LOG=info|g" .env
         sed -i "s|# DEBUG=false|DEBUG=false|g" .env
         
-        echo "Production .env file created successfully from config.env.example"
+        echo "Production .env file created successfully from .env.example"
         
         # Update docker-compose.yml with the correct image name
         sed -i "s|\${DOCKER_USERNAME}/ems:latest|$DOCKER_IMAGE|g" docker-compose.yml

@@ -9,6 +9,7 @@
 .env.development
 .env.test
 .env.production
+config/.env
 
 # IDE
 .vscode
@@ -28,15 +29,14 @@ yarn-debug.log*
 yarn-error.log*
 
 # Frontend dependencies and build artifacts
-src/client/node_modules
-src/client/dist
-src/client/build
-src/client/.vite
-src/client/coverage
+apps/client/node_modules
+apps/client/dist
+apps/client/build
+apps/client/.vite
+apps/client/coverage
 
 # Backend build artifacts
-src/server/target
-src/server/Cargo.lock
+apps/server/target
 
 # Testing
 coverage
@@ -52,5 +52,6 @@ docs
 *.md
 !README.md
 
-# Keep nginx configuration
-!nginx/ 
+# Keep deployment assets
+!infra/nginx/
+!infra/docker/

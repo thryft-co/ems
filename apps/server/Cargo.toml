@@ -1,0 +1,75 @@
+[package]
+name = "server"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "ems_server"
+path = "src/lib.rs"
+
+[[bin]]
+name = "server"
+path = "src/main.rs"
+
+[dependencies]
+# Web framework
+axum = "0.7"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace", "fs"] }
+
+# Async runtime
+tokio = { version = "1.49", features = ["full"] }
+
+# Database & ORM
+diesel = { version = "2.2.0", features = ["postgres", "uuid", "chrono", "r2d2", "serde_json"] }
+diesel-async = { version = "0.5.2", features = ["postgres", "bb8"] }
+bb8 = "0.8"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Date/Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# UUID support
+uuid = { version = "1.19", features = ["v4", "serde"] }
+
+# Environment variables
+dotenv = "0.15"
+
+# For migration binary
+tokio-postgres = "0.7"
+dotenvy = "0.15"
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Logging and tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Validation
+validator = { version = "0.16", features = ["derive"] }
+
+# Authentication
+jsonwebtoken = "9.3"
+bcrypt = "0.15"
+sha2 = "0.10"
+# Supabase integration
+postgrest = "1.6"
+reqwest = { version = "0.11", features = ["json"] }
+oauth2 = "4.4"
+url = "2.5"
+
+# Regular expressions
+regex = "1.12"
+
+# Lazy static for regex compilation
+lazy_static = "1.5"
+futures-util = "0.3.31"
+
+[dev-dependencies]
+# Testing dependencies
+tower = { version = "0.4", features = ["util"] }

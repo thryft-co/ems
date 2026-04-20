@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS public.item_bom CASCADE;
+DROP TABLE IF EXISTS public.inventory_items CASCADE;
+DROP TABLE IF EXISTS public.items CASCADE;

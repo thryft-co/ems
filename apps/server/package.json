@@ -1,0 +1,13 @@
+{
+  "name": "server",
+  "private": true,
+  "scripts": {
+    "build": "cargo build",
+    "clean": "cargo clean",
+    "dev": "cargo run --bin server",
+    "format": "cargo fmt --all",
+    "lint": "cargo check",
+    "test": "cargo test",
+    "typecheck": "cargo check"
+  }
+}

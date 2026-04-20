@@ -37,8 +37,8 @@ jobs:
         node-version: 22
         cache: 'npm'
         cache-dependency-path: |
-          packages/ems-client/package-lock.json
-          packages/ems-e2e-testing/package-lock.json
+          apps/client/package-lock.json
+          apps/e2e/package-lock.json
 
     - name: Set up Rust
       uses: dtolnay/rust-toolchain@stable
@@ -46,7 +46,7 @@ jobs:
     - name: Cache Rust dependencies
       uses: Swatinem/rust-cache@v2
       with:
-        workspaces: packages/ems-server
+        workspaces: apps/server
 
     - name: Install system dependencies
       run: |
@@ -57,36 +57,36 @@ jobs:
     # Build frontend
     # -----------------------------------------------------------------
     - name: Install frontend dependencies
-      working-directory: packages/ems-client
+      working-directory: apps/client
       run: npm ci
 
     - name: Build frontend
-      working-directory: packages/ems-client
+      working-directory: apps/client
       run: npm run build
 
     # -----------------------------------------------------------------
     # Build backend
     # -----------------------------------------------------------------
     - name: Build backend
-      working-directory: packages/ems-server
+      working-directory: apps/server
       run: cargo build
 
     # -----------------------------------------------------------------
     # Install E2E testing dependencies
     # -----------------------------------------------------------------
     - name: Install E2E test dependencies
-      working-directory: packages/ems-e2e-testing
+      working-directory: apps/e2e
       run: npm ci
 
     - name: Install Playwright browsers
-      working-directory: packages/ems-e2e-testing
+      working-directory: apps/e2e
       run: npx playwright install --with-deps chromium
 
     # -----------------------------------------------------------------
     # Create test environment
     # -----------------------------------------------------------------
     - name: Create E2E test .env.test
-      working-directory: packages/ems-e2e-testing
+      working-directory: apps/e2e
       run: |
         cat > .env.test << EOF
         BASE_URL=http://localhost:${{ env.FRONTEND_PORT }}
@@ -100,8 +100,8 @@ jobs:
     # Start services
     # -----------------------------------------------------------------
     - name: Start backend
-      working-directory: packages/ems-server
-      run: cargo run --bin ems-server &
+      working-directory: apps/server
+      run: cargo run --bin server &
       env:
         DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
         SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
@@ -110,7 +110,7 @@ jobs:
         BACKEND_PORT: ${{ env.BACKEND_PORT }}
 
     - name: Start frontend preview
-      working-directory: packages/ems-client
+      working-directory: apps/client
       run: npx vite preview --port ${{ env.FRONTEND_PORT }} &
 
     - name: Wait for services
@@ -145,7 +145,7 @@ jobs:
     # Run E2E tests (chromium only in CI for speed)
     # -----------------------------------------------------------------
     - name: Run E2E tests
-      working-directory: packages/ems-e2e-testing
+      working-directory: apps/e2e
       run: npx playwright test --project=chromium
       env:
         CI: true
@@ -158,7 +158,7 @@ jobs:
       if: always()
       with:
         name: playwright-report
-        path: packages/ems-e2e-testing/playwright-report/
+        path: apps/e2e/playwright-report/
         retention-days: 14
 
     - name: Upload test results
@@ -166,7 +166,7 @@ jobs:
       if: always()
       with:
         name: test-results
-        path: packages/ems-e2e-testing/test-results/
+        path: apps/e2e/test-results/
         retention-days: 7
 
     # -----------------------------------------------------------------

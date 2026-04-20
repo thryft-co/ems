@@ -1,8 +1,0 @@
-# For documentation of all the configuration options, see the
-# [Configuration File Guide](https://diesel.rs/guides/configuring-diesel-cli/)
-
-[print_schema]
-file = "src/schema.rs"
-
-[migrations_directory]
-dir = "../ems-db"

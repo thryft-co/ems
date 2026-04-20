@@ -22,17 +22,26 @@ A modern, multi-tenant Enterprise Management Suite for hardware manufacturing
 ### Project Structure
 
 ```
-├── packages/
-│   ├── ems-client/      # React frontend (TypeScript + Vite)
-│   ├── ems-server/      # Rust backend (Axum + Diesel)
-│   ├── ems-db/          # Database migrations (PostgreSQL)
-│   ├── ems-docker/      # Docker configuration
-│   ├── ems-e2e-testing/ # End-to-end tests
-│   └── ems-nginx/       # Nginx configuration
+├── apps/
+│   ├── client/          # React frontend (TypeScript + Vite)
+│   ├── server/          # Rust backend (Axum + Diesel)
+│   └── e2e/             # End-to-end tests (Playwright)
+├── infra/
+│   ├── db/
+│   │   ├── migrations/  # Diesel-compatible SQL migrations
+│   │   └── tests/       # Migration verification scripts
+│   ├── docker/          # Container build and compose assets
+│   └── nginx/           # Nginx configuration
+├── config/
+│   ├── .env.example     # Environment configuration template
+│   └── .env             # Local environment overrides (ignored)
+├── tooling/
+│   ├── requirements.txt # Python tool dependencies
+│   └── run.py           # Unified development script
 ├── .github/             # GitHub Actions CI/CD
-├── config.env.example   # Environment configuration template
-├── requirements.txt     # Python dependencies
-├── run.py               # Unified development script
+├── package.json         # Workspace scripts + Turbo
+├── pnpm-workspace.yaml  # Workspace package discovery
+├── turbo.json           # Monorepo task graph
 ├── .dockerignore        # Docker ignore rules
 ├── .gitignore           # Git ignore rules
 └── README.md            # This file
@@ -41,7 +50,7 @@ A modern, multi-tenant Enterprise Management Suite for hardware manufacturing
 ### Quick Start
 
 #### Prerequisites
-- Node.js 18+ and npm
+- Node.js 18+, npm, and pnpm 10+ for root workspace commands
 - Rust 1.70+ and Cargo
 - Python 3.7+ and pip
 - Supabase account
@@ -52,10 +61,11 @@ A modern, multi-tenant Enterprise Management Suite for hardware manufacturing
 git clone <repository-url>
 cd ems
 pip install -r requirements.txt
+pnpm install
 python run.py setup
 ```
 
-Configure `config.env` with your Supabase credentials, then start development:
+Configure `config/.env` with your Supabase credentials, then start development:
 
 ```bash
 python run.py dev
@@ -75,9 +85,18 @@ python run.py dev
 | `python run.py e2e` | Run E2E tests (Playwright) | `--smoke`, `--regression`, `--critical`, `--headed`, `--ui`, `--project`, `--no-server` |
 | `python run.py status` | Show component status | |
 
+### Workspace Commands
+
+```bash
+pnpm build
+pnpm lint
+pnpm test
+pnpm typecheck
+```
+
 ### E2E Testing
 
-The E2E test suite lives in `packages/ems-e2e-testing/` and uses [Playwright](https://playwright.dev/).
+The E2E test suite lives in `apps/e2e/` and uses [Playwright](https://playwright.dev/).
 
 ```bash
 # Run all E2E tests

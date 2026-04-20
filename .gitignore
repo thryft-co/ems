@@ -2,7 +2,7 @@
 # Environment & secrets
 # =========================
 .env
-config.env
+config/.env
 
 # =========================
 # OS / Editor
@@ -25,6 +25,8 @@ node_modules/
 .npm/
 .pnp.*
 yarn.lock
+pnpm-lock.yaml
+.turbo/
 
 # Yarn (Berry / modern)
 .yarn/cache/
@@ -59,3 +61,5 @@ target/
 # =========================
 *.swp
 *.tmp
+*.pyc
+__pycache__/

@@ -1,1 +1,1 @@
-click>=8.0.0 
+-r tooling/requirements.txt
