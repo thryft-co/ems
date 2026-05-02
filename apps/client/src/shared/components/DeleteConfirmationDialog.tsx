@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -44,22 +43,24 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogContent
-        className="bg-white dark:bg-slate-900 !bg-opacity-100 border-2 border-gray-200 shadow-lg rounded-lg"
-        style={{ backgroundColor: "white", opacity: 1 }}
+        className="bg-card !bg-opacity-100 border-[0.5px] border-border/50 shadow-soft-xl rounded-2xl max-w-[320px] sm:max-w-[340px] p-6"
+        style={{ backgroundColor: "hsl(var(--card))", opacity: 1 }}
       >
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>
+        <AlertDialogHeader className="text-center space-y-2">
+          <AlertDialogTitle className="text-[17px] font-semibold">{title}</AlertDialogTitle>
+          <AlertDialogDescription className="text-[13px] text-muted-foreground leading-relaxed">
             Are you sure you want to delete{" "}
             {itemLabel ? `${entityLabel} ${itemLabel}` : `this ${entityLabel}`}?
             {" "}This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+        <AlertDialogFooter className="flex flex-row gap-3 mt-4">
+          <AlertDialogCancel className="flex-1 rounded-[10px] h-11 text-[15px] font-semibold border-0 bg-secondary/60">
+            Cancel
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
-            className="bg-red-600 hover:bg-red-700"
+            className="flex-1 rounded-[10px] h-11 text-[15px] font-semibold bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
             Delete
           </AlertDialogAction>

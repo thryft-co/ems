@@ -132,7 +132,7 @@ export interface AuthContextType extends AuthState {
     tenantSubdomain: string,
   ) => Promise<void>;
   logout: () => Promise<void>;
-  selectTenant: (tenant: AuthTenant) => void;
+  selectTenant: (tenant: AuthTenant | null) => void;
   refreshAccessToken: () => Promise<void>;
   clearSession: () => void;
 }

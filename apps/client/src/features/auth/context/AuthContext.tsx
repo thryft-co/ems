@@ -360,9 +360,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   // Select tenant function
-  const selectTenant = (tenant: AuthTenant): void => {
-    dispatch({ type: "SELECT_TENANT", payload: tenant });
-    localStorage.setItem("currentTenant", JSON.stringify(tenant));
+  const selectTenant = (tenant: AuthTenant | null): void => {
+    dispatch({ type: "SELECT_TENANT", payload: tenant as any });
+    if (tenant) {
+      localStorage.setItem("currentTenant", JSON.stringify(tenant));
+    } else {
+      localStorage.removeItem("currentTenant");
+    }
   };
 
   // Refresh access token function

@@ -12,13 +12,13 @@ interface SidebarItem {
 }
 
 const sidebarButtonVariants = cva(
-  "flex items-center gap-3 w-full rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ease-out animate-fade-up focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+  "flex items-center gap-3 w-full rounded-[10px] px-3 py-2.5 text-[14px] font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-1",
   {
     variants: {
       active: {
-        true: "bg-primary text-primary-foreground shadow-soft border border-foreground/50",
+        true: "bg-primary/10 text-primary font-semibold",
         false:
-          "text-muted-foreground hover:bg-accent hover:text-accent-foreground hover:translate-x-0.5",
+          "text-foreground/60 hover:bg-secondary/60 hover:text-foreground",
       },
     },
     defaultVariants: {
@@ -43,18 +43,17 @@ export function Sidebar({
   return (
     <div
       className={cn(
-        "flex flex-col h-full bg-card/80 backdrop-blur-xl border-r border-border/50 shadow-soft",
+        "hidden md:flex flex-col h-full bg-card border-r-[0.5px] border-border/50",
         className,
       )}
     >
       {/* Navigation */}
-      <nav className="flex-1 px-6 pt-5 overflow-y-auto">
-        <div className="space-y-1">
-          {items.map((item, index) => (
+      <nav className="flex-1 px-3 pt-4 overflow-y-auto">
+        <div className="space-y-0.5">
+          {items.map((item) => (
             <button
               key={item.id}
               onClick={() => onItemClick(item.id)}
-              style={{ animationDelay: `${index * 30}ms` }}
               className={cn(
                 sidebarButtonVariants({ active: activeItem === item.id }),
               )}
@@ -62,23 +61,22 @@ export function Sidebar({
               {item.icon && (
                 <item.icon
                   className={cn(
-                    "h-4 w-4 transition-transform duration-200",
-                    activeItem === item.id ? "scale-110" : "text-primary",
+                    "h-[18px] w-[18px] flex-shrink-0",
+                    activeItem === item.id
+                      ? "text-primary"
+                      : "text-foreground/45",
                   )}
                 />
               )}
               <span className="truncate">{item.label}</span>
-              {activeItem === item.id && (
-                <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-foreground/80 animate-scale-in" />
-              )}
             </button>
           ))}
         </div>
       </nav>
 
       {/* Footer */}
-      <div className="p-4 mt-auto border-t border-border/50">
-        <p className="text-xs text-muted-foreground/70 text-center tracking-wide">
+      <div className="p-4 mt-auto">
+        <p className="text-[11px] text-muted-foreground/50 text-center">
           © 2026 Shishir Dey
         </p>
       </div>

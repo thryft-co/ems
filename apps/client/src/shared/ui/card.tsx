@@ -9,7 +9,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     <div
       ref={ref}
       className={cn(
-        "rounded-2xl border border-border/50 bg-card/80 backdrop-blur-sm text-card-foreground shadow-soft transition-all duration-300 ease-out animate-fade-up",
+        "rounded-2xl border-[0.5px] border-border/60 bg-card text-card-foreground shadow-soft transition-all duration-300 ease-out animate-fade-up",
         className,
       )}
       {...props}
@@ -24,7 +24,7 @@ const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("flex flex-col space-y-1.5 p-6 pb-4", className)}
+      className={cn("flex flex-col space-y-2 p-5 sm:p-6 pb-3 sm:pb-4", className)}
       {...props}
     />
   ),
@@ -38,7 +38,7 @@ const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
     <h3
       ref={ref}
       className={cn(
-        "text-xl font-semibold leading-none tracking-tight text-foreground",
+        "text-[20px] font-semibold leading-tight tracking-tight text-foreground",
         className,
       )}
       {...props}
@@ -56,7 +56,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm text-muted-foreground leading-relaxed", className)}
+    className={cn("text-[13px] text-muted-foreground leading-relaxed", className)}
     {...props}
   />
 ));
@@ -66,7 +66,7 @@ interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+    <div ref={ref} className={cn("p-5 sm:p-6 pt-0", className)} {...props} />
   ),
 );
 CardContent.displayName = "CardContent";
@@ -77,7 +77,7 @@ const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("flex items-center p-6 pt-0", className)}
+      className={cn("flex items-center p-5 sm:p-6 pt-0", className)}
       {...props}
     />
   ),

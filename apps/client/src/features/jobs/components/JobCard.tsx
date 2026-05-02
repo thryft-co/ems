@@ -1,62 +1,35 @@
 import React from "react";
 import { Button } from "@/shared/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/shared/ui/card";
+import { Badge } from "@/shared/ui/badge";
 import { JobDetailResponse } from "@/features/jobs/types/job";
 import { formatDate } from "@/shared/utils";
 import {
-  Calendar,
-  User,
-  Package,
-  Clock,
-  Tag,
-  Hash,
-  BriefcaseBusiness,
-  ClipboardList,
-  Wrench,
-  CheckCircle,
-  ArrowUpRight,
-  AlertCircle,
+  Calendar, User, Package, Clock, Tag, Hash,
+  BriefcaseBusiness, ClipboardList, Wrench, CheckCircle,
+  ArrowUpRight, AlertCircle,
 } from "lucide-react";
 
-// Define status and priority color mappings
-const statusColors: Record<string, string> = {
-  pending: "bg-yellow-500",
-  in_progress: "bg-blue-500",
-  on_hold: "bg-orange-500",
-  completed: "bg-green-500",
-  cancelled: "bg-red-500",
+const statusConfig: Record<string, { label: string; variant: "default" | "success" | "warning" | "destructive" | "secondary" }> = {
+  pending: { label: "Pending", variant: "warning" },
+  in_progress: { label: "In Progress", variant: "default" },
+  on_hold: { label: "On Hold", variant: "secondary" },
+  completed: { label: "Completed", variant: "success" },
+  cancelled: { label: "Cancelled", variant: "destructive" },
 };
 
-const priorityColors: Record<string, string> = {
-  low: "bg-slate-400",
-  normal: "bg-blue-400",
-  high: "bg-amber-500",
-  urgent: "bg-red-500",
+const priorityConfig: Record<string, { label: string; variant: "default" | "success" | "warning" | "destructive" | "secondary" }> = {
+  low: { label: "Low", variant: "secondary" },
+  normal: { label: "Normal", variant: "default" },
+  high: { label: "High", variant: "warning" },
+  urgent: { label: "Urgent", variant: "destructive" },
 };
 
-// Priority numbers
-const priorityNumbers: Record<string, number> = {
-  low: 1,
-  normal: 2,
-  high: 3,
-  urgent: 4,
-};
-
-// Job type icons mapping
 const jobTypeIcons: Record<string, React.ReactNode> = {
   manufacturing: <BriefcaseBusiness className="h-4 w-4" />,
   qa: <CheckCircle className="h-4 w-4" />,
   service: <Wrench className="h-4 w-4" />,
 };
 
-// Define props interface for the component
 interface JobCardProps {
   job: JobDetailResponse;
   onView?: (id: string) => void;
@@ -64,223 +37,100 @@ interface JobCardProps {
   onDelete?: (id: string) => void;
 }
 
-// Type for specific job details
-interface DetailItem {
-  label: string;
-  value: string;
-  icon: React.ReactNode;
-}
+interface DetailItem { label: string; value: string; icon: React.ReactNode; }
 
 const JobCard: React.FC<JobCardProps> = ({ job, onView, onEdit, onDelete }) => {
   if (!job) return null;
 
-  // Format job type display text
-  const jobTypeText =
-    job.job_type === "manufacturing"
-      ? "Manufacturing"
-      : job.job_type === "qa"
-        ? "QA"
-        : "Service";
+  const jobTypeText = job.job_type === "manufacturing" ? "Manufacturing" : job.job_type === "qa" ? "QA" : "Service";
+  const status = statusConfig[job.status] || { label: job.status, variant: "secondary" as const };
+  const priority = priorityConfig[job.priority] || { label: job.priority, variant: "secondary" as const };
 
-  // Get specific details based on job type
   const getSpecificDetails = (): DetailItem[] => {
     const details: DetailItem[] = [];
-
     if (job.job_type === "manufacturing" && job.manufacturing) {
-      if (job.manufacturing.production_line) {
-        details.push({
-          label: "Production Line",
-          value: job.manufacturing.production_line,
-          icon: <Tag className="h-3 w-3 flex-shrink-0 text-gray-500" />,
-        });
-      }
-      if (job.manufacturing.batch_number) {
-        details.push({
-          label: "Batch Number",
-          value: job.manufacturing.batch_number,
-          icon: <Hash className="h-3 w-3 flex-shrink-0 text-gray-500" />,
-        });
-      }
+      if (job.manufacturing.production_line) details.push({ label: "Line", value: job.manufacturing.production_line, icon: <Tag className="h-3.5 w-3.5 text-muted-foreground/50" /> });
+      if (job.manufacturing.batch_number) details.push({ label: "Batch", value: job.manufacturing.batch_number, icon: <Hash className="h-3.5 w-3.5 text-muted-foreground/50" /> });
     } else if (job.job_type === "qa" && job.qa) {
-      if (job.qa.inspection_type) {
-        details.push({
-          label: "Inspection Type",
-          value: job.qa.inspection_type,
-          icon: <CheckCircle className="h-3 w-3 flex-shrink-0 text-gray-500" />,
-        });
-      }
+      if (job.qa.inspection_type) details.push({ label: "Inspection", value: job.qa.inspection_type, icon: <CheckCircle className="h-3.5 w-3.5 text-muted-foreground/50" /> });
     } else if (job.job_type === "service" && job.service) {
-      if (job.service.service_type) {
-        details.push({
-          label: "Service Type",
-          value: job.service.service_type,
-          icon: <Wrench className="h-3 w-3 flex-shrink-0 text-gray-500" />,
-        });
-      }
+      if (job.service.service_type) details.push({ label: "Type", value: job.service.service_type, icon: <Wrench className="h-3.5 w-3.5 text-muted-foreground/50" /> });
     }
     return details;
   };
 
   const specificDetails = getSpecificDetails();
-  const priorityNumber = priorityNumbers[job.priority] || 2;
 
   return (
-    <Card className="w-full h-[200px] mb-3 hover:shadow-md transition-shadow flex flex-col">
-      <CardHeader className="p-3 pb-2 flex-shrink-0">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="bg-slate-100 p-1 rounded">
-              {jobTypeIcons[job.job_type] || (
-                <ClipboardList className="h-4 w-4" />
-              )}
-            </div>
-            <div>
-              <CardTitle className="text-base">{job.job_number}</CardTitle>
-              <CardDescription className="text-xs mt-0">
-                {jobTypeText}
-              </CardDescription>
-            </div>
+    <div className="bg-card rounded-2xl border-[0.5px] border-border/60 shadow-soft p-4 flex flex-col hover:shadow-soft-md transition-all duration-200 animate-fade-up">
+      {/* Header */}
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-[8px] bg-secondary/60 flex items-center justify-center flex-shrink-0">
+            {jobTypeIcons[job.job_type] || <ClipboardList className="h-4 w-4 text-muted-foreground/60" />}
           </div>
-
-          <div className="flex gap-2 items-center">
-            {/* Status indicator dot */}
-            <div
-              className={`h-3 w-3 rounded-full ${statusColors[job.status] || "bg-gray-400"}`}
-              title={`Status: ${job.status?.toUpperCase() || "UNKNOWN"}`}
-            />
-
-            {/* Priority indicator with number */}
-            <div
-              className={`h-5 w-5 rounded-full ${priorityColors[job.priority] || "bg-gray-400"} flex items-center justify-center`}
-              title={`Priority: ${job.priority?.toUpperCase() || "NORMAL"}`}
-            >
-              <span className="text-white text-xs font-bold">
-                {priorityNumber}
-              </span>
-            </div>
-
-            {job.status === "on_hold" && (
-              <div title="On Hold">
-                <AlertCircle className="h-4 w-4 text-orange-500" />
-              </div>
-            )}
-            {job.priority === "urgent" && (
-              <div title="Urgent">
-                <AlertCircle className="h-4 w-4 text-red-500" />
-              </div>
-            )}
+          <div>
+            <p className="text-[15px] font-semibold text-foreground leading-tight">{job.job_number}</p>
+            <p className="text-[12px] text-muted-foreground/60">{jobTypeText}</p>
           </div>
         </div>
-      </CardHeader>
+        <div className="flex items-center gap-1.5">
+          <Badge variant={status.variant}>{status.label}</Badge>
+          {(job.priority === "high" || job.priority === "urgent") && (
+            <Badge variant={priority.variant}>{priority.label}</Badge>
+          )}
+        </div>
+      </div>
 
-      <CardContent className="p-3 pt-1 overflow-y-auto flex-grow">
-        <div className="grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
-          <div className="flex items-center gap-2" title="Quantity">
-            <Package className="h-4 w-4 text-gray-500" />
-            <span className="font-medium">{job.quantity}</span>
+      {/* Details */}
+      <div className="grid grid-cols-2 gap-x-3 gap-y-2 text-[13px] mb-3 flex-1">
+        <div className="flex items-center gap-2">
+          <Package className="h-3.5 w-3.5 text-muted-foreground/50 flex-shrink-0" />
+          <span className="text-foreground/80 font-medium">{job.quantity}</span>
+        </div>
+        {job.due_date && (
+          <div className="flex items-center gap-2">
+            <Calendar className="h-3.5 w-3.5 text-muted-foreground/50 flex-shrink-0" />
+            <span className="text-foreground/80 font-medium">{formatDate(job.due_date)}</span>
           </div>
-
-          {job.due_date && (
-            <div className="flex items-center gap-2" title="Due Date">
-              <Calendar className="h-4 w-4 text-gray-500" />
-              <span className="font-medium">{formatDate(job.due_date)}</span>
-            </div>
-          )}
-
-          {job.assigned_user_id && (
-            <div
-              className="flex items-center gap-2 overflow-hidden"
-              title={`Assigned to: ${job.assigned_user_id}`}
-            >
-              <User className="h-4 w-4 flex-shrink-0 text-gray-500" />
-              <span className="font-medium truncate">
-                {typeof job.assigned_user_id === "string" &&
-                job.assigned_user_id.includes("-")
-                  ? job.assigned_user_id.split("-")[0]
-                  : job.assigned_user_id}
-              </span>
-            </div>
-          )}
-
-          {job.labor_hours && job.labor_hours > 0 && (
-            <div className="flex items-center gap-2" title="Labor Hours">
-              <Clock className="h-4 w-4 text-gray-500" />
-              <span className="font-medium">{job.labor_hours}</span>
-            </div>
-          )}
-
-          {/* Display specific details for each job type */}
-          {specificDetails.map((detail, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-2 overflow-hidden"
-              title={`${detail.label}: ${detail.value}`}
-            >
-              {detail.icon}
-              <span className="font-medium truncate">{detail.value}</span>
-            </div>
-          ))}
-
-          {/* Item ID shortened */}
-          <div
-            className="flex items-center gap-2 col-span-2 overflow-hidden"
-            title={`Item ID: ${job.item_id}`}
-          >
-            <Hash className="h-4 w-4 flex-shrink-0 text-gray-500" />
-            <span className="font-medium truncate">
-              {typeof job.item_id === "string" && job.item_id.includes("-")
-                ? `${job.item_id.split("-")[0]}...`
-                : job.item_id}
+        )}
+        {job.assigned_user_id && (
+          <div className="flex items-center gap-2 overflow-hidden">
+            <User className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground/50" />
+            <span className="text-foreground/80 font-medium truncate">
+              {typeof job.assigned_user_id === "string" && job.assigned_user_id.includes("-") ? job.assigned_user_id.split("-")[0] : job.assigned_user_id}
             </span>
           </div>
-        </div>
-      </CardContent>
+        )}
+        {job.labor_hours && job.labor_hours > 0 && (
+          <div className="flex items-center gap-2">
+            <Clock className="h-3.5 w-3.5 text-muted-foreground/50 flex-shrink-0" />
+            <span className="text-foreground/80 font-medium">{job.labor_hours}h</span>
+          </div>
+        )}
+        {specificDetails.map((detail, index) => (
+          <div key={index} className="flex items-center gap-2 overflow-hidden">
+            {detail.icon}
+            <span className="text-foreground/80 font-medium truncate">{detail.value}</span>
+          </div>
+        ))}
+      </div>
 
-      <CardFooter className="p-2 flex justify-end gap-1 border-t mt-auto flex-shrink-0">
+      {/* Actions */}
+      <div className="flex items-center gap-2 pt-3 border-t-[0.5px] border-border/40 mt-auto">
         {onView && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8"
-            onClick={() => {
-              console.log(`JobCard: View button clicked for job ID: ${job.id}`);
-              onView(job.id);
-            }}
-          >
-            <ArrowUpRight className="h-4 w-4 mr-1" />
-            View
+          <Button variant="ghost" size="sm" className="flex-1 h-9 text-[13px]" onClick={() => onView(job.id)}>
+            <ArrowUpRight className="h-3.5 w-3.5 mr-1" />View
           </Button>
         )}
         {onEdit && (
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8"
-            onClick={() => {
-              console.log(`JobCard: Edit button clicked for job ID: ${job.id}`);
-              onEdit(job.id);
-            }}
-          >
-            Edit
-          </Button>
+          <Button variant="ghost" size="sm" className="flex-1 h-9 text-[13px]" onClick={() => onEdit(job.id)}>Edit</Button>
         )}
         {onDelete && (
-          <Button
-            variant="destructive"
-            size="sm"
-            className="h-8"
-            onClick={() => {
-              console.log(
-                `JobCard: Delete button clicked for job ID: ${job.id}`,
-              );
-              onDelete(job.id);
-            }}
-          >
-            Delete
-          </Button>
+          <Button variant="ghost" size="sm" className="h-9 text-[13px] text-destructive hover:bg-destructive/8" onClick={() => onDelete(job.id)}>Delete</Button>
         )}
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 };
 

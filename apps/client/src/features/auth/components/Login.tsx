@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { LoginRequest } from "@/features/auth/types/auth";
 import { Button } from "@/shared/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 
@@ -73,20 +72,23 @@ const Login: React.FC<LoginProps> = ({ onSwitchToRegister }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md shadow-soft-lg">
-        <CardHeader className="text-center pb-2">
-          <div className="mx-auto w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-soft mb-4">
-            <span className="text-white font-bold text-xl">E</span>
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 sm:px-6">
+      <div className="w-full max-w-sm">
+        {/* Logo + Header */}
+        <div className="text-center mb-8">
+          <div className="mx-auto w-14 h-14 rounded-[16px] bg-primary flex items-center justify-center shadow-soft-md mb-5">
+            <span className="text-white font-bold text-2xl">E</span>
           </div>
-          <CardTitle className="text-2xl font-semibold tracking-tight">
+          <h1 className="text-[28px] font-bold tracking-tight text-foreground mb-1">
             Sign In
-          </CardTitle>
-          <p className="text-center text-sm text-muted-foreground">
-            Enter your credentials to access your organizations
+          </h1>
+          <p className="text-[15px] text-muted-foreground">
+            Enter your credentials to continue
           </p>
-        </CardHeader>
-        <CardContent>
+        </div>
+
+        {/* Form Card */}
+        <div className="bg-card rounded-2xl border-[0.5px] border-border/60 shadow-soft p-5 sm:p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Field */}
             <div>
@@ -97,12 +99,12 @@ const Login: React.FC<LoginProps> = ({ onSwitchToRegister }) => {
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your email"
-                className={errors.email ? "border-red-500" : ""}
+                placeholder="you@example.com"
+                className={errors.email ? "ring-2 ring-destructive/30" : ""}
                 disabled={isLoading}
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                <p className="mt-1.5 text-[13px] text-destructive">{errors.email}</p>
               )}
             </div>
 
@@ -116,43 +118,43 @@ const Login: React.FC<LoginProps> = ({ onSwitchToRegister }) => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Enter your password"
-                className={errors.password ? "border-red-500" : ""}
+                className={errors.password ? "ring-2 ring-destructive/30" : ""}
                 disabled={isLoading}
               />
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                <p className="mt-1.5 text-[13px] text-destructive">{errors.password}</p>
               )}
             </div>
 
             {/* Submit Error */}
             {submitError && (
-              <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              <p className="text-[13px] text-destructive text-center py-1">
                 {submitError}
-              </div>
+              </p>
             )}
 
             {/* Submit Button */}
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
+        </div>
 
-          {/* Switch to Register */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              Don't have an account?{" "}
-              <button
-                type="button"
-                onClick={onSwitchToRegister}
-                className="font-medium text-primary hover:underline"
-                disabled={isLoading}
-              >
-                Sign up
-              </button>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+        {/* Switch to Register */}
+        <div className="mt-6 text-center">
+          <p className="text-[14px] text-muted-foreground">
+            Don't have an account?{" "}
+            <button
+              type="button"
+              onClick={onSwitchToRegister}
+              className="font-semibold text-primary hover:text-primary/80 transition-colors"
+              disabled={isLoading}
+            >
+              Sign up
+            </button>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
