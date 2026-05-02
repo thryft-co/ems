@@ -16,7 +16,7 @@ interface DeleteConfirmationDialogProps {
   isOpen: boolean;
   itemLabel?: string;
   onClose: () => void;
-  onConfirm: () => Promise<void>;
+  onConfirm: () => Promise<unknown>;
   onDeleted?: () => void;
   title?: string;
 }

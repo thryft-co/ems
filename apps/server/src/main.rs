@@ -1,5 +1,4 @@
 use axum::{middleware as axum_middleware, routing::get, Router};
-use dotenv::dotenv;
 use std::{env, path::Path};
 use tower::ServiceBuilder;
 use tower_http::{cors::CorsLayer, services::ServeDir, trace::TraceLayer};
@@ -13,8 +12,7 @@ use ems_server::{
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Load environment variables
-    dotenv().ok();
+    load_environment();
 
     // Initialize tracing
     tracing_subscriber::fmt::init();
@@ -126,6 +124,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     axum::serve(listener, app).await?;
 
     Ok(())
+}
+
+fn load_environment() {
+    if let Ok(path) = env::var("ENV_FILE") {
+        if Path::new(&path).exists() {
+            dotenv::from_path(path).ok();
+        }
+    }
+
+    for path in ["config/.env", "../../config/.env", ".env"] {
+        if Path::new(path).exists() {
+            dotenv::from_path(path).ok();
+        }
+    }
 }
 
 async fn health_check() -> &'static str {

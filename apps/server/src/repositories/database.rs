@@ -15,7 +15,11 @@ pub struct DatabaseService {
 
 impl DatabaseService {
     pub async fn new() -> Result<Self> {
-        let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+        let database_url = env::var("DATABASE_URL").map_err(|_| {
+            anyhow::anyhow!(
+                "DATABASE_URL environment variable is required. For Docker, pass config/.env with `--env-file config/.env` or mount it at /app/config/.env."
+            )
+        })?;
 
         let config = AsyncPgConnection::establish(&database_url).await?;
         drop(config); // Test connection and drop it

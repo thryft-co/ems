@@ -6,7 +6,7 @@ services:
     expose:
       - "5002"
     env_file:
-      - .env
+      - ../../config/.env
     environment:
       - RUST_LOG=info
       - STATIC_FILES_DIR=/app/static

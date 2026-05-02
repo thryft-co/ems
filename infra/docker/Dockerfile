@@ -1,7 +1,11 @@
-# Multi-stage Dockerfile for Enterprise Management Suite (EMS)
+# Multi-stage Dockerfile for Enterprise Management Suite (EMS).
+# Build with the repository root as the Docker context:
+# docker build -f infra/docker/Dockerfile .
+# Run with your local config:
+# docker run --env-file config/.env -p 5002:5002 ems-app
 
 # Stage 1: Build React Frontend
-FROM node:18-alpine AS frontend-builder
+FROM node:22-alpine AS frontend-builder
 
 WORKDIR /app/frontend
 
@@ -29,15 +33,15 @@ WORKDIR /app/backend
 COPY apps/server/Cargo.toml ./
 COPY apps/server/Cargo.lock ./
 
-# Create a dummy main.rs for dependency resolution
-RUN mkdir src && echo "fn main() {}" > src/main.rs
+# Create dummy crate targets for dependency resolution.
+RUN mkdir src && echo "" > src/lib.rs && echo "fn main() {}" > src/main.rs
 
-# Generate Cargo.lock and build dependencies (this will create Cargo.lock if it doesn't exist)
-RUN cargo fetch && cargo build --release && rm -rf src
+# Fetch and build dependencies using the checked-in lockfile.
+RUN cargo fetch --locked && cargo build --release --locked --bin server && rm -rf src
 
 # Copy backend source and build
 COPY apps/server/ ./
-RUN touch src/main.rs && cargo build --release
+RUN touch src/lib.rs src/main.rs && cargo build --release --locked --bin server
 
 # Stage 3: Runtime Image
 FROM debian:bookworm-slim AS runtime
@@ -55,14 +59,18 @@ RUN useradd -r -s /bin/false ems
 
 WORKDIR /app
 
+# Match the config layout used by run.py and the Rust dotenv loader.
+RUN mkdir -p /app/config
+
 # Copy built backend binary
 COPY --from=backend-builder /app/backend/target/release/server ./server
 
 # Copy built frontend static files
 COPY --from=frontend-builder /app/frontend/dist ./static
 
-# Copy configuration template
-COPY config/.env.example ./.env.example
+# Copy configuration template. Provide real secrets via env vars,
+# docker compose env_file, or a mounted /app/config/.env file.
+COPY config/.env.example ./config/.env.example
 
 # Set ownership and permissions
 RUN chown -R ems:ems /app
@@ -77,7 +85,9 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 
 # Set environment variables
 ENV RUST_LOG=info
+ENV BACKEND_PORT=5002
 ENV STATIC_FILES_DIR=/app/static
+ENV ENV_FILE=/app/config/.env
 
 # Run the application
 CMD ["./server"] 
